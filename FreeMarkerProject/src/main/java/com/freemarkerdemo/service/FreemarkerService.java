@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
+import com.freemarkerdemo.model.Person;
 import com.freemarkerdemo.model.Product;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -29,9 +32,10 @@ import freemarker.template.TemplateExceptionHandler;
 @Service
 public class FreemarkerService {
 	
-	private String html;
+	private Template template;
+	private Map map;
 
-	public void createTemplate() throws IOException, TemplateException {
+	public void createTemplate(Person person) throws IOException, TemplateException {
 		
 		//FreeMarker configuration object
 		Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
@@ -44,41 +48,45 @@ public class FreemarkerService {
         cfg.setFallbackOnNullLoopVariable(false);
 
 		//Load template from source folder
-		cfg.setDirectoryForTemplateLoading(new File("C:\\Users\\lenovo\\eclipse-workspace\\FreeMarkerProject\\src\\main\\resources\\templates"));
+		cfg.setDirectoryForTemplateLoading(new File("C:\\Users\\lenovo\\git\\FreeMarkerProject\\FreeMarkerProject\\src\\main\\resources\\templates"));
 
 		//Get Template
-		Template template = cfg.getTemplate("product.ftl");
+		template = cfg.getTemplate("hello.ftl");
 
 		//Create data-model
-		Map map = new HashMap();
-		map.put("name", "Jinal");
-
-		Product product = new Product("products/watch","Titan Watch",5000);
-		map.put("latestProduct", product);
+		map = new HashMap();
+		map.put("person", person);
 		
-		StringWriter stringWriter = new StringWriter();
-		template.process(map, stringWriter);
-		
-		html = stringWriter.toString();
 	}
 	
-	public void createWord() throws IOException {
-		//Parse HTML
-		Document doc = Jsoup.parse(html);
+	public void createWord() throws IOException, TemplateException {
+		OutputStream os = new FileOutputStream("E:\\Jinal's project\\Udemy\\Java\\WordExample.doc");
+		Writer writer = new OutputStreamWriter(os);
+		template.process(map, writer);
 		
+		
+		//Code for docx file
+	/*	//Parse HTML
+		Document doc = Jsoup.parse(html);
+		//System.out.println(doc.wholeText());
 		//Save it to Word document
-		XWPFDocument doc2 = new XWPFDocument();
-		OutputStream os = new FileOutputStream("E:\\Jinal's project\\Udemy\\Java\\WordExample4.docx");
+	 	XWPFDocument doc2 = new XWPFDocument();
+		OutputStream os = new FileOutputStream("E:\\Jinal's project\\Udemy\\Java\\WordExample5.docx");
 		XWPFParagraph paragraph = doc2.createParagraph();
 		XWPFRun run = paragraph.createRun();
 		run.setText(doc.body().text());
-		doc2.write(os);
+		doc2.write(os); */
 	}
 	
-	public void createPdf() throws IOException, DocumentException {
+	public void createPdf() throws IOException, DocumentException, TemplateException {
+		//Process Template
+		StringWriter stringWriter = new StringWriter();
+		template.process(map, stringWriter);
+		String html = stringWriter.toString();
+		
 		//Create PDF document
 		com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-		FileOutputStream output = new  FileOutputStream(new File("E:\\Jinal's project\\Udemy\\Java\\PDFTest4.pdf"));
+		FileOutputStream output = new  FileOutputStream(new File("E:\\Jinal's project\\Udemy\\Java\\PDFTest.pdf"));
 		PdfWriter writer = PdfWriter.getInstance(document, output);
 		document.open();
 		
