@@ -9,10 +9,12 @@
 	<th>Name</th>
 	<th>Place</th>
 	</tr>
+	<#list persons as person>
 	<tr>
-	<td>"${person.name}"</td>
-	<td>"${person.place}"</td>
+	<td>${person.name}</td>
+	<td>${person.place}</td>
 	</tr>
+	</#list>
 	</table>
 </body>
 </html>

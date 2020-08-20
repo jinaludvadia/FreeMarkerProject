@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -35,7 +36,7 @@ public class FreemarkerService {
 	private Template template;
 	private Map map;
 
-	public void createTemplate(Person person) throws IOException, TemplateException {
+	public void createTemplate(List<Person> persons) throws IOException, TemplateException {
 		
 		//FreeMarker configuration object
 		Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
@@ -55,7 +56,7 @@ public class FreemarkerService {
 
 		//Create data-model
 		map = new HashMap();
-		map.put("person", person);
+		map.put("persons", persons);
 		
 	}
 	
@@ -94,4 +95,6 @@ public class FreemarkerService {
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(html));
 		document.close();
 	}
+	
+	
 }

@@ -3,6 +3,7 @@ package com.freemarkerdemo.controller;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -45,10 +46,10 @@ public class FileDownloadController {
 	}
 	
 	@PostMapping("/download/{fileName:.+}")
-	public ResponseEntity downloadFile(@PathVariable String fileName, @RequestBody Person person) 
+	public ResponseEntity downloadFile(@PathVariable String fileName, @RequestBody List<Person> persons) 
 			throws IOException, TemplateException, DocumentException {
-		service.createTemplate(person);
-		service.createWord();
+		service.createTemplate(persons);
+	//	service.createWord();
 		service.createPdf();
 		Path path = Paths.get(fileBasePath + fileName);
 		Resource resource = new UrlResource(path.toUri());
@@ -57,4 +58,5 @@ public class FileDownloadController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
 	}
+	
 }
