@@ -19,11 +19,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
+import com.freemarkerdemo.model.Header;
+import com.freemarkerdemo.model.HeaderFooter;
 import com.freemarkerdemo.model.Person;
 import com.freemarkerdemo.model.Product;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.itextpdf.tool.xml.html.table.Table;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -92,9 +98,10 @@ public class FreemarkerService {
 		document.open();
 		
 		//Parse HTML and save it to PDF Document
+		HeaderFooter event = new HeaderFooter();
+		writer.setPageEvent(event);
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(html));
 		document.close();
 	}
-	
 	
 }

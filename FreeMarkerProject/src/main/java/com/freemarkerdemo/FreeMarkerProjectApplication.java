@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-public class FreeMarkerProjectApplication {
+public class FreeMarkerProjectApplication{
 
 	@Autowired
 	FreemarkerService service;
@@ -20,4 +20,13 @@ public class FreeMarkerProjectApplication {
 		SpringApplication.run(FreeMarkerProjectApplication.class, args);
 		
 	}
+	
+	/*
+	@Override
+	public void run(String... args) throws Exception {
+		service.createTemplate(Collections.singletonList(new Person("Jinal","Mumbai")));
+	//	service.createWord();
+		service.createPdf();
+		
+	}*/
 }

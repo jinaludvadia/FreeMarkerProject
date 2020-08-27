@@ -32,24 +32,10 @@ public class FileDownloadController {
 	
 	String fileBasePath = "E:\\Jinal's project\\Udemy\\Java\\";
 	
-	@GetMapping("/download/{fileName:.+}")
-	public ResponseEntity downloadFileFromLocal(@PathVariable String fileName, @RequestParam String name) throws IOException, TemplateException, DocumentException {
-		//service.createTemplate(name,person);
-		//service.createWord();
-		//service.createPdf();
-		Path path = Paths.get(fileBasePath + fileName);
-		Resource resource = new UrlResource(path.toUri());
-		return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType("application/octet-stream"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				.body(resource);
-	}
-	
-	@PostMapping("/download/{fileName:.+}")
-	public ResponseEntity downloadFile(@PathVariable String fileName, @RequestBody List<Person> persons) 
+	@PostMapping("/downloadPdf/{fileName:.+}")
+	public ResponseEntity downloadPdfFile(@PathVariable String fileName, @RequestBody List<Person> persons) 
 			throws IOException, TemplateException, DocumentException {
 		service.createTemplate(persons);
-	//	service.createWord();
 		service.createPdf();
 		Path path = Paths.get(fileBasePath + fileName);
 		Resource resource = new UrlResource(path.toUri());
@@ -59,4 +45,16 @@ public class FileDownloadController {
 				.body(resource);
 	}
 	
+	@PostMapping("/downloadWord/{fileName:.+}")
+	public ResponseEntity downloadWordFile(@PathVariable String fileName, @RequestBody List<Person> persons) 
+			throws IOException, TemplateException, DocumentException {
+		service.createTemplate(persons);
+		service.createWord();
+		Path path = Paths.get(fileBasePath + fileName);
+		Resource resource = new UrlResource(path.toUri());
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
 }
